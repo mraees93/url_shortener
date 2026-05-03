@@ -8,38 +8,37 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using url_shortener.Database;
 using url_shortener.Models;
-using NanoidDotNet; 
+using NanoidDotNet;
+using url_shortener.Services;
 
 namespace url_shortener.Controllers
 {
     [ApiController]
+    [Route("api/[controller]")]
     public class UrlController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly UrlShortenerService _service;
 
-        public UrlController(AppDbContext context) => _context = context;
-
-        [HttpPost("api/shorten")]
-        public async Task<IActionResult> Shorten([FromBody] string longUrl)
+        public UrlController(AppDbContext context, UrlShortenerService service)
         {
-            if (!Uri.TryCreate(longUrl, UriKind.Absolute, out _)) return BadRequest("Invalid URL");
-
-            var code = Nanoid.Generate(size: 6);
-            var shortUrl = new ShortUrl { LongUrl = longUrl, ShortCode = code };
-
-            _context.ShortUrls.Add(shortUrl);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { ShortCode = code });
+            _context = context;
+            _service = service;
         }
 
-        [HttpGet("{code}")]
-        public async Task<IActionResult> RedirectTo(string code)
+        [HttpPost("shorten")]
+        public async Task<IActionResult> Shorten([FromBody] string url)
         {
-            var entry = await _context.ShortUrls.FirstOrDefaultAsync(u => u.ShortCode == code);
-            if (entry == null) return NotFound();
+            if (!Uri.TryCreate(url, UriKind.Absolute, out _)) return BadRequest("Invalid URL");
 
-            return Redirect(entry.LongUrl);
+            var code = _service.GenerateCode();
+
+            var newUrl = new ShortUrl { LongUrl = url, ShortCode = code };
+
+            _context.ShortUrls.Add(newUrl);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { shortCode = code });
         }
     }
 }

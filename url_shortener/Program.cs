@@ -1,5 +1,6 @@
 using url_shortener.Database;
 using Microsoft.EntityFrameworkCore;
+using url_shortener.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
     });
+
+builder.Services.AddSingleton<UrlShortenerService>();
 
 var app = builder.Build();
 
