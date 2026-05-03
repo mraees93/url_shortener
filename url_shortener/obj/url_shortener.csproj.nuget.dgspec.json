@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\raees\\OneDrive\\Desktop\\github\\react_c#_url_shortener\\url_shortener\\url_shortener.csproj": {}
+    "C:\\Users\\raees\\OneDrive\\Desktop\\github\\react_csharp_url_shortener\\url_shortener\\url_shortener.csproj": {}
   },
   "projects": {
-    "C:\\Users\\raees\\OneDrive\\Desktop\\github\\react_c#_url_shortener\\url_shortener\\url_shortener.csproj": {
+    "C:\\Users\\raees\\OneDrive\\Desktop\\github\\react_csharp_url_shortener\\url_shortener\\url_shortener.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\raees\\OneDrive\\Desktop\\github\\react_c#_url_shortener\\url_shortener\\url_shortener.csproj",
+        "projectUniqueName": "C:\\Users\\raees\\OneDrive\\Desktop\\github\\react_csharp_url_shortener\\url_shortener\\url_shortener.csproj",
         "projectName": "url_shortener",
-        "projectPath": "C:\\Users\\raees\\OneDrive\\Desktop\\github\\react_c#_url_shortener\\url_shortener\\url_shortener.csproj",
+        "projectPath": "C:\\Users\\raees\\OneDrive\\Desktop\\github\\react_csharp_url_shortener\\url_shortener\\url_shortener.csproj",
         "packagesPath": "C:\\Users\\raees\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\raees\\OneDrive\\Desktop\\github\\react_c#_url_shortener\\url_shortener\\obj\\",
+        "outputPath": "C:\\Users\\raees\\OneDrive\\Desktop\\github\\react_csharp_url_shortener\\url_shortener\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\raees\\AppData\\Roaming\\NuGet\\NuGet.Config"
