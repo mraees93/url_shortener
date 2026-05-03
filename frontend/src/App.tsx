@@ -2,20 +2,25 @@ import { useState } from 'react';
 import { Link2 } from 'lucide-react';
 import { UrlInput } from './components/UrlInput';
 import { ResultCard } from './components/ResultCard';
+import { urlApi } from './api/urlApi';
 
 function App() {
   const [shortUrl, setShortUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleShorten = async () => { //removed url param
-    setIsLoading(true);
+  const handleShorten = async (url: string) => {
+  setIsLoading(true);
+  try {
+    const shortCode = await urlApi.shorten(url); 
     
-    // Mocking the API call for now
-    setTimeout(() => {
-      setShortUrl(`localhost:5000/Ab123`);
-      setIsLoading(false);
-    }, 800);
-  };
+    setShortUrl(`http://localhost:5219/${shortCode}`); 
+  } catch (error: unknown) {
+    console.error('API Error:', (error as Error).message);
+    alert('Backend not reached. Is dotnet run active?');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">

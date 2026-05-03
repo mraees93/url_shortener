@@ -20,7 +20,7 @@ export const UrlInput = ({ onShorten, isLoading }: UrlInputProps) => {
       className="bg-white p-2 rounded-2xl shadow-xl shadow-slate-200/50 flex gap-2 border border-slate-100"
     >
       <input 
-        type="url" 
+        type="text" 
         required
         placeholder="https://very-long-link.com..."
         className="flex-1 px-4 py-3 outline-none text-slate-600 placeholder:text-slate-400 bg-transparent"
