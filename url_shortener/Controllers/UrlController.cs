@@ -29,16 +29,21 @@ namespace url_shortener.Controllers
         [HttpPost("shorten")]
         public async Task<IActionResult> Shorten([FromBody] string url)
         {
-            if (!Uri.TryCreate(url, UriKind.Absolute, out _)) return BadRequest("Invalid URL");
+            try
+            {
+                // 1. Basic validation
+                if (!Uri.TryCreate(url, UriKind.Absolute, out _)) return BadRequest("Invalid URL");
 
-            var code = _service.GenerateCode();
+                // 2. Generate a dummy code
+                var code = "test123";
 
-            var newUrl = new ShortUrl { LongUrl = url, ShortCode = code };
-
-            _context.ShortUrls.Add(newUrl);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { shortCode = code });
+                // 3. RETURN IMMEDIATELY (Do not create a 'new ShortUrl' object yet)
+                return Ok(new { shortCode = code });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("/{code}")]
