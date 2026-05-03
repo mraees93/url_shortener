@@ -40,5 +40,21 @@ namespace url_shortener.Controllers
 
             return Ok(new { shortCode = code });
         }
+
+        [HttpGet("/{code}")]
+        public async Task<IActionResult> RedirectTo(string code)
+        {
+            var entry = await _context.ShortUrls
+                .FirstOrDefaultAsync(u => u.ShortCode == code);
+
+            if (entry == null)
+            {
+                return NotFound("Short URL not found.");
+            }
+
+            // (Optional Intermediate Step) Track the click here later!
+
+            return Redirect(entry.LongUrl);
+        }
     }
 }
