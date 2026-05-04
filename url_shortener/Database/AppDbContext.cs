@@ -14,6 +14,8 @@ namespace url_shortener.Database
 
         public DbSet<ShortUrl> ShortUrls { get; set; }
 
+        public DbSet<ClickEvent> ClickEvents { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Ensuring that ShortCode is unique for fast lookups

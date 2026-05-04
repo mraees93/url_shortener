@@ -51,7 +51,14 @@ namespace url_shortener.Controllers
                 return NotFound("Short URL not found.");
             }
 
-            // (Optional Intermediate Step) Track the click here later!
+            // Log the click
+            var click = new ClickEvent
+            {
+                ShortCode = code,
+                UserAgent = Request.Headers["User-Agent"].ToString()
+            };
+            _context.ClickEvents.Add(click);
+            await _context.SaveChangesAsync();
 
             return Redirect(entry.LongUrl);
         }
