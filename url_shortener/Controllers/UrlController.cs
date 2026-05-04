@@ -62,5 +62,12 @@ namespace url_shortener.Controllers
 
             return Redirect(entry.LongUrl);
         }
+
+        [HttpGet("stats/{code}")]
+        public async Task<IActionResult> GetStats(string code)
+        {
+            var count = await _context.ClickEvents.CountAsync(c => c.ShortCode == code);
+            return Ok(new { clickCount = count });
+        }
     }
 }
