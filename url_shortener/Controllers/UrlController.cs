@@ -69,5 +69,17 @@ namespace url_shortener.Controllers
             var count = await _context.ClickEvents.CountAsync(c => c.ShortCode == code);
             return Ok(new { clickCount = count });
         }
+
+        [HttpGet("history")]
+        public async Task<IActionResult> GetHistory()
+        {
+            // Fetch last 10 links, ordered by newest first
+            var history = await _context.ShortUrls
+                .OrderByDescending(u => u.Id)
+                .Take(10)
+                .ToListAsync();
+
+            return Ok(history);
+        }
     }
 }

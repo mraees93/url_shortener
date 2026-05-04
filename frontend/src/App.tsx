@@ -1,50 +1,39 @@
-import { useState } from 'react';
-import { Link2 } from 'lucide-react';
+import { useHistory } from './hooks/useHistory';
 import { UrlInput } from './components/UrlInput';
-import { ResultCard } from './components/ResultCard';
-import { urlApi } from './api/urlApi';
+import { HistoryList } from './components/HistoryList';
+import { Link2 } from 'lucide-react';
 
 function App() {
-  const [shortUrl, setShortUrl] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const { history, isLoading, shortenUrl } = useHistory();
+  const BASE_URL = 'http://localhost:5219';
 
   const handleShorten = async (url: string) => {
-  setIsLoading(true);
-  try {
-    const shortCode = await urlApi.shorten(url); 
-    
-    setShortUrl(`http://localhost:5219/${shortCode}`); 
-  } catch (error: unknown) {
-    console.error('API Error:', (error as Error).message);
-    alert('Backend not reached. Is dotnet run active?');
-  } finally {
-    setIsLoading(false);
-  }
-};
+    try {
+      await shortenUrl(url);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert('Error: ' + error.message);
+      }
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
-      <div className="max-w-xl w-full space-y-8 text-center">
-        
-        <header className="space-y-2">
-          <div className="flex justify-center">
-             <div className="bg-indigo-600 p-3 rounded-2xl shadow-lg shadow-indigo-200">
-               <Link2 className="text-white w-8 h-8" />
-             </div>
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center py-20 px-6">
+      <div className="max-w-xl w-full space-y-10">
+        <header className="text-center space-y-2">
+          <div className="flex justify-center mb-4">
+            <div className="bg-indigo-600 p-3 rounded-2xl shadow-lg shadow-indigo-200">
+              <Link2 className="text-white w-8 h-8" />
+            </div>
           </div>
-          <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">
-            Link Shrinker
-          </h1>
-          <p className="text-slate-500 text-lg">
-            Create professional, short links in seconds.
-          </p>
+          <h1 className="text-4xl font-extrabold text-slate-900">Link Shrinker</h1>
+          <p className="text-slate-500">Manage and track your short links</p>
         </header>
 
-        <main className="space-y-6">
+        <main className="space-y-8">
           <UrlInput onShorten={handleShorten} isLoading={isLoading} />
-          {shortUrl && <ResultCard shortUrl={shortUrl} />}
+          <HistoryList links={history} baseUrl={BASE_URL} />
         </main>
-
       </div>
     </div>
   );
