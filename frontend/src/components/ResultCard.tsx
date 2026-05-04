@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { Copy, Check } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Copy, Check, BarChart3 } from 'lucide-react';
+import { urlApi } from '../api/urlApi';
 
 interface ResultCardProps {
   shortUrl: string;
@@ -7,6 +8,16 @@ interface ResultCardProps {
 
 export const ResultCard = ({ shortUrl }: ResultCardProps) => {
   const [copied, setCopied] = useState(false);
+  const [clicks, setClicks] = useState<number | null>(null);
+
+  const code = shortUrl.split('/').pop() || '';
+
+  useEffect(() => {
+    if (code) {
+      // Logic for fetching stats from the backend
+      urlApi.getStats(code).then(setClicks);
+    }
+  }, [code]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shortUrl);
@@ -19,7 +30,11 @@ export const ResultCard = ({ shortUrl }: ResultCardProps) => {
       <span className="text-indigo-700 font-medium truncate mr-4">
         {shortUrl}
       </span>
-      <button 
+      <div className="flex items-center gap-1 bg-slate-100 text-slate-600 px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider">
+        <BarChart3 size={14} />
+        {clicks !== null ? `${clicks} Clicks` : '...'}
+      </div>
+      <button
         onClick={copyToClipboard}
         className="p-2 hover:bg-indigo-100 rounded-lg transition-colors text-indigo-600 flex-shrink-0"
         title="Copy to clipboard"

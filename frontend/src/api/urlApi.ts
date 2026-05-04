@@ -18,4 +18,11 @@ export const urlApi = {
     const data = await response.json();
     return data.shortCode;
   },
+  
+  getStats: async (code: string): Promise<number> => {
+  const response = await fetch(`http://localhost:5219/api/url/stats/${code}`);
+  if (!response.ok) return 0;
+  const data = await response.json();
+  return data.clickCount;
+},
 };
