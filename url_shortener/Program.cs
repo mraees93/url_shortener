@@ -9,7 +9,7 @@ builder.Services.AddOpenApi();
 
 // Add PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite("Data Source=urlshortener.db"));
 
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(policy => {
