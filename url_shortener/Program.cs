@@ -63,4 +63,11 @@ app.UseRateLimiter();
 
 app.MapControllers();
 
+//ensures Neon tables are created automatically on deploy
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<url_shortener.Database.AppDbContext>();
+    db.Database.Migrate();
+}
+
 app.Run();
