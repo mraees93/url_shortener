@@ -43,6 +43,8 @@ builder.Services.AddRateLimiter(options =>
 
 var app = builder.Build();
 
+app.UseMiddleware<url_shortener.Middleware.ExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
