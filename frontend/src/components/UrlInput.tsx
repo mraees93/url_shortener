@@ -21,6 +21,7 @@ export const UrlInput = ({ onShorten, isLoading }: UrlInputProps) => {
     >
       <input 
         type="text" 
+        maxLength={2000}
         required
         placeholder="https://very-long-link.com..."
         className="flex-1 px-4 py-3 outline-none text-slate-600 placeholder:text-slate-400 bg-transparent"
