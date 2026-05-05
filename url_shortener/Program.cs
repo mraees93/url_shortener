@@ -1,6 +1,8 @@
 using url_shortener.Database;
 using Microsoft.EntityFrameworkCore;
 using url_shortener.Services;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,24 @@ builder.Services.AddCors(options => {
 
 builder.Services.AddSingleton<UrlShortenerService>();
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("fixed", opt =>
+    {
+        opt.Window = TimeSpan.FromMinutes(1); // The time window
+        opt.PermitLimit = 10;                // Max requests per window
+        opt.QueueLimit = 0;                   // Don't queue extra requests, just reject them
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+
+    // Custom response when limited
+    options.OnRejected = async (context, token) =>
+    {
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        await context.HttpContext.Response.WriteAsJsonAsync(new { error = "Too many requests. Try again in a minute." }, token);
+    };
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -36,6 +56,8 @@ if (app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 
 app.UseCors();
+
+app.UseRateLimiter();
 
 app.MapControllers();
 

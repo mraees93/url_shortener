@@ -10,6 +10,7 @@ using url_shortener.Database;
 using url_shortener.Models;
 using NanoidDotNet;
 using url_shortener.Services;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace url_shortener.Controllers
 {
@@ -27,6 +28,7 @@ namespace url_shortener.Controllers
         }
 
         [HttpPost("shorten")]
+        [EnableRateLimiting("fixed")] // The policy i named in Program.cs
         public async Task<IActionResult> Shorten([FromBody] string url)
         {
             if (!Uri.TryCreate(url, UriKind.Absolute, out _)) return BadRequest("Invalid URL");
