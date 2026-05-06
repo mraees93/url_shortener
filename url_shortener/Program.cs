@@ -20,21 +20,21 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.KnownProxies.Clear();
 });
 
-// FORCE CHECK: Get from .NET config OR direct Environment Variable
+// 1. DUAL-SOURCE CONNECTION CHECK
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
                        ?? Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
 
+// 2. HARDENED DB CONFIGURATION
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("Host="))
     {
-        // If "Host=" exists, we are 100% on Neon
         Console.WriteLine(">>>> SYSTEM CHECK: CONNECTION TO NEON POSTGRES DETECTED <<<<");
-        options.UseNpgsql(connectionString);
+        // Force version 16 to ensure compatibility with Neon's engine
+        options.UseNpgsql(connectionString, o => o.SetPostgresVersion(16, 0));
     }
     else
     {
-        // Fallback to SQLite
         Console.WriteLine(">>>> SYSTEM CHECK: FALLING BACK TO SQLITE <<<<");
         options.UseSqlite(connectionString ?? "Data Source=vertex.db");
     }
@@ -80,7 +80,7 @@ app.UseCors();
 app.UseRateLimiter();
 app.MapControllers();
 
-// AUTOMATIC MIGRATION LOGIC
+// 3. SECURE AUTOMATIC MIGRATION LOGIC
 using (var scope = app.Services.CreateScope())
 {
     try 
@@ -92,6 +92,7 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
+        // This captures the 28P01 error if it still occurs
         Console.WriteLine($">>>> SYSTEM CHECK: MIGRATION ERROR: {ex.Message} <<<<");
     }
 }
