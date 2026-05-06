@@ -12,8 +12,8 @@ using url_shortener.Database;
 namespace url_shortener.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260506214810_ReadyToLaunch")]
-    partial class ReadyToLaunch
+    [Migration("20260506221947_FreshStartFinal")]
+    partial class FreshStartFinal
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

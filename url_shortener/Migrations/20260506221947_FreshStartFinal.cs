@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace url_shortener.Migrations
 {
     /// <inheritdoc />
-    public partial class FinalAivenMigration : Migration
+    public partial class FreshStartFinal : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ClickEvents",
+                name: "FinalClicks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -23,11 +23,11 @@ namespace url_shortener.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClickEvents", x => x.Id);
+                    table.PrimaryKey("PK_FinalClicks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShortUrls",
+                name: "FinalLinks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -38,12 +38,12 @@ namespace url_shortener.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ShortUrls", x => x.Id);
+                    table.PrimaryKey("PK_FinalLinks", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShortUrls_ShortCode",
-                table: "ShortUrls",
+                name: "IX_FinalLinks_ShortCode",
+                table: "FinalLinks",
                 column: "ShortCode",
                 unique: true);
         }
@@ -52,10 +52,10 @@ namespace url_shortener.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ClickEvents");
+                name: "FinalClicks");
 
             migrationBuilder.DropTable(
-                name: "ShortUrls");
+                name: "FinalLinks");
         }
     }
 }
