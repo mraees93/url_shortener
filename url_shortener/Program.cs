@@ -29,8 +29,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("Host="))
     {
-        Console.WriteLine(">>>> SYSTEM CHECK: CONNECTION TO NEON POSTGRES DETECTED <<<<");
-        // Force version 16 to ensure compatibility with Neon's engine
+        Console.WriteLine(">>>> SYSTEM CHECK: EXTERNAL POSTGRES DETECTED <<<<");
+        // Force version 16 to ensure compatibility with Aiven/Modern engines
         options.UseNpgsql(connectionString, o => o.SetPostgresVersion(16, 0));
     }
     else
@@ -92,7 +92,6 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        // This captures the 28P01 error if it still occurs
         Console.WriteLine($">>>> SYSTEM CHECK: MIGRATION ERROR: {ex.Message} <<<<");
     }
 }
