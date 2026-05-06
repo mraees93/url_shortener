@@ -9,7 +9,6 @@ export const useHistory = () => {
 
   const fetchHistory = useCallback(async () => {
 
-    // If the first request takes long, we assume the server is waking up
     const timer = setTimeout(() => setIsServerStarting(true), 1500);
 
     try {
@@ -27,11 +26,23 @@ export const useHistory = () => {
     setIsLoading(true);
     try {
       const result = await urlApi.shorten(longUrl);
-      setHistory(prev => [result, ...prev]);
-      
+      console.log("Shorten Result:", result);
+
+      // Safety Check: Only update if the result is a valid object with a code
+      if (result && typeof result === 'object' && result.shortCode) {
+        setHistory(prev => {
+          // Prevent duplicates to keep the list clean
+          if (prev.some(link => link.shortCode === result.shortCode)) return prev;
+          return [result, ...prev];
+        });
+      } else {
+        // If result is invalid, re-fetch as a fallback to keep the list visible
+        await fetchHistory();
+      }
+
       return result;
     } catch (error) {
-      throw error; 
+      throw error;
     } finally {
       setIsLoading(false);
     }

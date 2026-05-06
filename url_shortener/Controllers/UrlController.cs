@@ -31,23 +31,26 @@ namespace url_shortener.Controllers
         [EnableRateLimiting("fixed")]
         public async Task<IActionResult> Shorten([FromBody] string url)
         {
+            if (!Uri.TryCreate(url, UriKind.Absolute, out _))
+                return BadRequest("Invalid URL");
+
+            var code = _service.GenerateCode();
+            var newUrl = new ShortUrl { LongUrl = url, ShortCode = code };
+
+            _context.ShortUrls.Add(newUrl);
+            await _context.SaveChangesAsync();
+
             var host = Request.Host.Value;
             var protocol = Request.Scheme;
 
-            // Fetch and project into a new object that includes shortUrl
-            var history = await _context.ShortUrls
-                .OrderByDescending(u => u.Id)
-                .Take(10)
-                .Select(u => new
-                {
-                    u.ShortCode,
-                    u.LongUrl,
-                    // This creates the field the frontend is looking for
-                    shortUrl = $"{protocol}://{host}/{u.ShortCode}"
-                })
-                .ToListAsync();
+            var response = new
+            {
+                shortCode = code,
+                longUrl = url,
+                shortUrl = $"{protocol}://{host}/{code}"
+            };
 
-            return Ok(history);
+            return Ok(response);
         }
 
         [HttpGet("/{code}")]
@@ -83,13 +86,23 @@ namespace url_shortener.Controllers
         [HttpGet("history")]
         public async Task<IActionResult> GetHistory()
         {
-            // Fetch last 10 links, ordered by newest first
+            var host = Request.Host.Value;
+            var protocol = Request.Scheme;
+
             var history = await _context.ShortUrls
                 .OrderByDescending(u => u.Id)
                 .Take(10)
+                .Select(u => new
+                {
+                    u.ShortCode,
+                    u.LongUrl,
+                    // This ensures the frontend has the full clickable link
+                    shortUrl = $"{protocol}://{host}/{u.ShortCode}"
+                })
                 .ToListAsync();
 
             return Ok(history);
         }
+
     }
 }
