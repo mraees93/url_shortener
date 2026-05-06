@@ -23,22 +23,28 @@ namespace url_shortener.Database
             // ShortUrl Configuration
             modelBuilder.Entity<ShortUrl>(entity =>
             {
+                // Set the new table name
+                entity.ToTable("FinalLinks");
+
+                // Ensuring that ShortCode is unique for fast lookups
                 entity.HasIndex(u => u.ShortCode).IsUnique();
 
-                // Use Identity for the ID (The Postgres way)
+                // Force PostgreSQL Identity (Auto-increment)
                 entity.Property(e => e.Id)
                       .UseIdentityByDefaultColumn();
             });
 
-            // ClickEvent Configuration (Important to fix this now too!)
+            // ClickEvent Configuration
             modelBuilder.Entity<ClickEvent>(entity =>
             {
+                // Set the new table name
+                entity.ToTable("FinalClicks");
+
+                // Force PostgreSQL Identity (Auto-increment)
                 entity.Property(e => e.Id)
                       .UseIdentityByDefaultColumn();
             });
-
-            modelBuilder.Entity<ShortUrl>().ToTable("FinalLinks");
-            modelBuilder.Entity<ClickEvent>().ToTable("FinalClicks");
         }
+
     }
 }
