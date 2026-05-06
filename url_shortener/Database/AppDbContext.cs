@@ -36,7 +36,9 @@ namespace url_shortener.Database
                 entity.Property(e => e.Id)
                       .UseIdentityByDefaultColumn();
             });
-        }
 
+            modelBuilder.Entity<ShortUrl>().ToTable("FinalLinks");
+            modelBuilder.Entity<ClickEvent>().ToTable("FinalClicks");
+        }
     }
 }
