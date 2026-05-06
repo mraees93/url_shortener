@@ -6,7 +6,6 @@ import { Share2 } from 'lucide-react';
 
 function App() {
   const { history, isLoading, shortenUrl, isServerStarting } = useHistory();
-  const BASE_URL = 'http://localhost:5219';
 
   const handleShorten = async (url: string) => {
     try {
@@ -36,7 +35,7 @@ function App() {
 
         <main className="space-y-8">
           <UrlInput onShorten={handleShorten} isLoading={isLoading} />
-          <HistoryList links={history} baseUrl={BASE_URL} />
+          <HistoryList links={history} />
         </main>
       </div>
     </div>

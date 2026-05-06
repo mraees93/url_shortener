@@ -31,27 +31,23 @@ namespace url_shortener.Controllers
         [EnableRateLimiting("fixed")]
         public async Task<IActionResult> Shorten([FromBody] string url)
         {
-            if (!Uri.TryCreate(url, UriKind.Absolute, out _))
-                return BadRequest("Invalid URL");
-
-            var code = _service.GenerateCode();
-            var newUrl = new ShortUrl { LongUrl = url, ShortCode = code };
-
-            _context.ShortUrls.Add(newUrl);
-            await _context.SaveChangesAsync();
-
-            // Dynamically detect if we are on localhost or Render
             var host = Request.Host.Value;
             var protocol = Request.Scheme;
 
-            // Construct the full clickable URL
-            string fullShortUrl = $"{protocol}://{host}/{code}";
+            // Fetch and project into a new object that includes shortUrl
+            var history = await _context.ShortUrls
+                .OrderByDescending(u => u.Id)
+                .Take(10)
+                .Select(u => new
+                {
+                    u.ShortCode,
+                    u.LongUrl,
+                    // This creates the field the frontend is looking for
+                    shortUrl = $"{protocol}://{host}/{u.ShortCode}"
+                })
+                .ToListAsync();
 
-            return Ok(new
-            {
-                shortCode = code,
-                shortUrl = fullShortUrl
-            });
+            return Ok(history);
         }
 
         [HttpGet("/{code}")]

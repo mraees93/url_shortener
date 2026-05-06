@@ -14,7 +14,7 @@ export const useHistory = () => {
 
     try {
       const data = await urlApi.getHistory();
-      setHistory(data);
+      setHistory(Array.isArray(data) ? data : []);
       setIsServerStarting(false);
     } catch (error) {
       console.error("Failed to fetch history:", error);
@@ -26,8 +26,10 @@ export const useHistory = () => {
   const shortenUrl = async (longUrl: string) => {
     setIsLoading(true);
     try {
-      await urlApi.shorten(longUrl);
-      await fetchHistory();
+      const result = await urlApi.shorten(longUrl);
+      setHistory(prev => [result, ...prev]);
+      
+      return result;
     } catch (error) {
       throw error; 
     } finally {

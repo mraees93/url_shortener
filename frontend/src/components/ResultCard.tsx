@@ -10,20 +10,26 @@ export const ResultCard = ({ shortUrl }: ResultCardProps) => {
   const [copied, setCopied] = useState(false);
   const [clicks, setClicks] = useState<number | null>(null);
 
-  const code = shortUrl.split('/').pop() || '';
-
   useEffect(() => {
-    if (code) {
-      // Logic for fetching stats from the backend
-      urlApi.getStats(code).then(setClicks);
+    if (shortUrl) {
+      const code = shortUrl.split('/').pop() || '';
+      
+      if (code) {
+        urlApi.getStats(code)
+          .then(setClicks)
+          .catch(err => console.error("Stats fetch error:", err));
+      }
     }
-  }, [code]);
+  }, [shortUrl]);
 
   const copyToClipboard = () => {
+    if (!shortUrl) return;
     navigator.clipboard.writeText(shortUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  if (!shortUrl) return null;
 
   return (
     <div className="animate-in fade-in slide-in-from-top-4 duration-500 bg-indigo-50 border border-indigo-100 p-4 rounded-xl flex items-center justify-between">

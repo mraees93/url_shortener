@@ -1,16 +1,11 @@
 import { ResultCard } from './ResultCard';
-
-interface ShortenedLink {
-  shortCode: string;
-  longUrl: string;
-}
+import type { ShortenedLink } from '../api/urlApi';
 
 interface HistoryListProps {
   links: ShortenedLink[];
-  baseUrl: string;
 }
 
-export const HistoryList = ({ links, baseUrl }: HistoryListProps) => {
+export const HistoryList = ({ links }: HistoryListProps) => {
   if (links.length === 0) return null;
 
   return (
@@ -20,9 +15,9 @@ export const HistoryList = ({ links, baseUrl }: HistoryListProps) => {
       </h3>
       <div className="space-y-3">
         {links.map((link) => (
-          <ResultCard 
-            key={link.shortCode} 
-            shortUrl={`${baseUrl}/${link.shortCode}`} 
+          <ResultCard
+            key={link.shortCode}
+            shortUrl={link.shortUrl}
           />
         ))}
       </div>

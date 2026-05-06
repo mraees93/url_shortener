@@ -11,8 +11,8 @@ using url_shortener.Database;
 namespace url_shortener.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260505095227_AddShortCodeIndex")]
-    partial class AddShortCodeIndex
+    [Migration("20260506143558_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

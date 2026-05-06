@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace url_shortener.Migrations
 {
     /// <inheritdoc />
-    public partial class AddClickAnalytics : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,6 +25,27 @@ namespace url_shortener.Migrations
                 {
                     table.PrimaryKey("PK_ClickEvents", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "ShortUrls",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    LongUrl = table.Column<string>(type: "TEXT", nullable: false),
+                    ShortCode = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShortUrls", x => x.Id);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShortUrls_ShortCode",
+                table: "ShortUrls",
+                column: "ShortCode",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -32,6 +53,9 @@ namespace url_shortener.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ClickEvents");
+
+            migrationBuilder.DropTable(
+                name: "ShortUrls");
         }
     }
 }
