@@ -28,10 +28,11 @@ namespace url_shortener.Controllers
         }
 
         [HttpPost("shorten")]
-        [EnableRateLimiting("fixed")] // The policy i named in Program.cs
+        [EnableRateLimiting("fixed")]
         public async Task<IActionResult> Shorten([FromBody] string url)
         {
-            if (!Uri.TryCreate(url, UriKind.Absolute, out _)) return BadRequest("Invalid URL");
+            if (!Uri.TryCreate(url, UriKind.Absolute, out _))
+                return BadRequest("Invalid URL");
 
             var code = _service.GenerateCode();
             var newUrl = new ShortUrl { LongUrl = url, ShortCode = code };
@@ -39,7 +40,18 @@ namespace url_shortener.Controllers
             _context.ShortUrls.Add(newUrl);
             await _context.SaveChangesAsync();
 
-            return Ok(new { shortCode = code });
+            // Dynamically detect if we are on localhost or Render
+            var host = Request.Host.Value;
+            var protocol = Request.Scheme;
+
+            // Construct the full clickable URL
+            string fullShortUrl = $"{protocol}://{host}/{code}";
+
+            return Ok(new
+            {
+                shortCode = code,
+                shortUrl = fullShortUrl
+            });
         }
 
         [HttpGet("/{code}")]
