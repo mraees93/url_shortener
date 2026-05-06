@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using url_shortener.Database;
 
 #nullable disable
@@ -11,8 +12,8 @@ using url_shortener.Database;
 namespace url_shortener.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260506201231_PostgresFix")]
-    partial class PostgresFix
+    [Migration("20260506205209_PostgresAutoIncrement")]
+    partial class PostgresAutoIncrement
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,7 +46,8 @@ namespace url_shortener.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");

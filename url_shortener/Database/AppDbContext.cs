@@ -22,6 +22,10 @@ namespace url_shortener.Database
             modelBuilder.Entity<ShortUrl>()
                 .HasIndex(u => u.ShortCode)
                 .IsUnique();
+
+            modelBuilder.Entity<ShortUrl>()
+            .Property(e => e.Id)
+            .UseIdentityByDefaultColumn();
         }
     }
 }
