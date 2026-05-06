@@ -23,7 +23,7 @@ namespace url_shortener.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ClickedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ShortCode")
                         .IsRequired()
@@ -34,7 +34,7 @@ namespace url_shortener.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clicks_v5_Final", (string)null);
+                    b.ToTable("Clicks_Final_v6", (string)null);
                 });
 
             modelBuilder.Entity("url_shortener.Models.ShortUrl", b =>
@@ -43,7 +43,7 @@ namespace url_shortener.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LongUrl")
                         .IsRequired()
@@ -58,7 +58,7 @@ namespace url_shortener.Migrations
                     b.HasIndex("ShortCode")
                         .IsUnique();
 
-                    b.ToTable("Links_v5_Final", (string)null);
+                    b.ToTable("Links_Final_v6", (string)null);
                 });
 #pragma warning restore 612, 618
         }

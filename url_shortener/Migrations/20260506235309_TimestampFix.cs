@@ -6,42 +6,42 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace url_shortener.Migrations
 {
     /// <inheritdoc />
-    public partial class GuidFinalRename : Migration
+    public partial class TimestampFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Clicks_v5_Final",
+                name: "Clicks_Final_v6",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     ShortCode = table.Column<string>(type: "TEXT", nullable: false),
-                    ClickedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ClickedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserAgent = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clicks_v5_Final", x => x.Id);
+                    table.PrimaryKey("PK_Clicks_Final_v6", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Links_v5_Final",
+                name: "Links_Final_v6",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     LongUrl = table.Column<string>(type: "TEXT", nullable: false),
                     ShortCode = table.Column<string>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Links_v5_Final", x => x.Id);
+                    table.PrimaryKey("PK_Links_Final_v6", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Links_v5_Final_ShortCode",
-                table: "Links_v5_Final",
+                name: "IX_Links_Final_v6_ShortCode",
+                table: "Links_Final_v6",
                 column: "ShortCode",
                 unique: true);
         }
@@ -50,10 +50,10 @@ namespace url_shortener.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Clicks_v5_Final");
+                name: "Clicks_Final_v6");
 
             migrationBuilder.DropTable(
-                name: "Links_v5_Final");
+                name: "Links_Final_v6");
         }
     }
 }
