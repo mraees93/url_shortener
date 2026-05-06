@@ -1,7 +1,7 @@
 import { useHistory } from './hooks/useHistory';
 import { UrlInput } from './components/UrlInput';
 import { HistoryList } from './components/HistoryList';
-import { Link2 } from 'lucide-react';
+import { Share2 } from 'lucide-react';
 
 function App() {
   const { history, isLoading, shortenUrl } = useHistory();
@@ -22,12 +22,12 @@ function App() {
       <div className="max-w-xl w-full space-y-10">
         <header className="text-center space-y-2">
           <div className="flex justify-center mb-4">
-            <div className="bg-indigo-600 p-3 rounded-2xl shadow-lg shadow-indigo-200">
-              <Link2 className="text-white w-8 h-8" />
+            <div className="bg-slate-900 p-3 rounded-2xl shadow-lg shadow-indigo-200">
+              <Share2 className="text-indigo-400" />
             </div>
           </div>
-          <h1 className="text-4xl font-extrabold text-slate-900">Link Shrinker</h1>
-          <p className="text-slate-500">Manage and track your short links</p>
+          <h1 className="text-4xl font-extrabold text-slate-900">Vertex</h1>
+          <p className="text-slate-500">Scalable Microservice Architecture for URL Redirection & Analytics</p>
         </header>
 
         <main className="space-y-8">

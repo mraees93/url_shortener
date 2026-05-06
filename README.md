@@ -1,3 +1,6 @@
+Vertex is a containerised, high-performance microservice architecture built with .NET 10 and React. It demonstrates advanced system design patterns including In-Memory Caching, Rate Limiting, and Relational Analytics.
+
+
 What was added:
 
 1. Backend Architecture (C# / .NET 9)Vertical Slice Logic: Separated concerns into Controllers, Services (Hashing logic), and Models.Database Integration: Implemented Entity Framework Core with SQLite (and prepared for PostgreSQL in production).Database Indexing: Added a Unique Index on the ShortCode column for \(O(\log n)\) lookup speeds and data integrity.In-Memory Caching: Integrated IMemoryCache to optimize the "hot path" (redirects), reducing database load.Global Exception Middleware: Built a centralized "safety net" that catches all server errors and returns professional, structured JSON responses.Rate Limiting: Implemented the .NET 9 Fixed Window Limiter to protect the API from bot spam and DDoS attacks.Analytics Engine: Created a relational tracking system that logs every click, including Timestamps and User-Agent data.
