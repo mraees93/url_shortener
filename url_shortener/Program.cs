@@ -20,27 +20,29 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.KnownProxies.Clear();
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// FORCE CHECK: Get from .NET config OR direct Environment Variable
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+                       ?? Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    if (connectionString != null && connectionString.Contains("Host="))
+    if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("Host="))
     {
-        // Use PostgreSQL for Neon (Production)
+        // If "Host=" exists, we are 100% on Neon
+        Console.WriteLine(">>>> SYSTEM CHECK: CONNECTION TO NEON POSTGRES DETECTED <<<<");
         options.UseNpgsql(connectionString);
     }
     else
     {
-        // Default to SQLite (Local Development)
-        options.UseSqlite(connectionString);
+        // Fallback to SQLite
+        Console.WriteLine(">>>> SYSTEM CHECK: FALLING BACK TO SQLITE <<<<");
+        options.UseSqlite(connectionString ?? "Data Source=vertex.db");
     }
 });
 
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(policy => {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
 
@@ -70,10 +72,7 @@ app.UseMiddleware<url_shortener.Middleware.ExceptionMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/openapi/v1.json", "v1");
-    });
+    app.UseSwaggerUI(options => { options.SwaggerEndpoint("/openapi/v1.json", "v1"); });
 }
 
 app.UseForwardedHeaders();
@@ -87,13 +86,13 @@ using (var scope = app.Services.CreateScope())
     try 
     {
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        // This handles both SQLite (local) and Postgres (Neon) automatically
+        Console.WriteLine(">>>> SYSTEM CHECK: STARTING DATABASE MIGRATIONS <<<<");
         db.Database.Migrate();
+        Console.WriteLine(">>>> SYSTEM CHECK: MIGRATIONS COMPLETE <<<<");
     }
     catch (Exception ex)
     {
-        // Log the error but let the app start (avoids Render crash loops)
-        Console.WriteLine($"Migration Error: {ex.Message}");
+        Console.WriteLine($">>>> SYSTEM CHECK: MIGRATION ERROR: {ex.Message} <<<<");
     }
 }
 
