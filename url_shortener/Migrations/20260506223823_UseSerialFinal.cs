@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace url_shortener.Migrations
 {
     /// <inheritdoc />
-    public partial class FreshStartFinal : Migration
+    public partial class UseSerialFinal : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "FinalClicks",
+                name: "Clicks_Final_v3",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -23,11 +23,11 @@ namespace url_shortener.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FinalClicks", x => x.Id);
+                    table.PrimaryKey("PK_Clicks_Final_v3", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "FinalLinks",
+                name: "Links_Final_v3",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -38,12 +38,12 @@ namespace url_shortener.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FinalLinks", x => x.Id);
+                    table.PrimaryKey("PK_Links_Final_v3", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_FinalLinks_ShortCode",
-                table: "FinalLinks",
+                name: "IX_Links_Final_v3_ShortCode",
+                table: "Links_Final_v3",
                 column: "ShortCode",
                 unique: true);
         }
@@ -52,10 +52,10 @@ namespace url_shortener.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "FinalClicks");
+                name: "Clicks_Final_v3");
 
             migrationBuilder.DropTable(
-                name: "FinalLinks");
+                name: "Links_Final_v3");
         }
     }
 }

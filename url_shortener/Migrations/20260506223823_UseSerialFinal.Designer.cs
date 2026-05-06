@@ -12,8 +12,8 @@ using url_shortener.Database;
 namespace url_shortener.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260506221947_FreshStartFinal")]
-    partial class FreshStartFinal
+    [Migration("20260506223823_UseSerialFinal")]
+    partial class UseSerialFinal
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,7 +26,7 @@ namespace url_shortener.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
                     b.Property<DateTime>("ClickedAt")
                         .HasColumnType("TEXT");
@@ -40,7 +40,7 @@ namespace url_shortener.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FinalClicks", (string)null);
+                    b.ToTable("Clicks_Final_v3", (string)null);
                 });
 
             modelBuilder.Entity("url_shortener.Models.ShortUrl", b =>
@@ -48,7 +48,7 @@ namespace url_shortener.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -66,7 +66,7 @@ namespace url_shortener.Migrations
                     b.HasIndex("ShortCode")
                         .IsUnique();
 
-                    b.ToTable("FinalLinks", (string)null);
+                    b.ToTable("Links_Final_v3", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -23,7 +23,7 @@ namespace url_shortener.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
                     b.Property<DateTime>("ClickedAt")
                         .HasColumnType("TEXT");
@@ -37,7 +37,7 @@ namespace url_shortener.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FinalClicks", (string)null);
+                    b.ToTable("Clicks_Final_v3", (string)null);
                 });
 
             modelBuilder.Entity("url_shortener.Models.ShortUrl", b =>
@@ -45,7 +45,7 @@ namespace url_shortener.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -63,7 +63,7 @@ namespace url_shortener.Migrations
                     b.HasIndex("ShortCode")
                         .IsUnique();
 
-                    b.ToTable("FinalLinks", (string)null);
+                    b.ToTable("Links_Final_v3", (string)null);
                 });
 #pragma warning restore 612, 618
         }
