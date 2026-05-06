@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using url_shortener.Database;
 
 #nullable disable
@@ -20,10 +19,8 @@ namespace url_shortener.Migrations
 
             modelBuilder.Entity("url_shortener.Models.ClickEvent", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ClickedAt")
                         .HasColumnType("TEXT");
@@ -37,15 +34,13 @@ namespace url_shortener.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clicks_Final_v3", (string)null);
+                    b.ToTable("ClickEvents");
                 });
 
             modelBuilder.Entity("url_shortener.Models.ShortUrl", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -63,7 +58,7 @@ namespace url_shortener.Migrations
                     b.HasIndex("ShortCode")
                         .IsUnique();
 
-                    b.ToTable("Links_Final_v3", (string)null);
+                    b.ToTable("Links_Final_v4", (string)null);
                 });
 #pragma warning restore 612, 618
         }
