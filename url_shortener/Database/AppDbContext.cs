@@ -18,14 +18,25 @@ namespace url_shortener.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Ensuring that ShortCode is unique for fast lookups
-            modelBuilder.Entity<ShortUrl>()
-                .HasIndex(u => u.ShortCode)
-                .IsUnique();
+            base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ShortUrl>()
-            .Property(e => e.Id)
-            .UseIdentityByDefaultColumn();
+            // ShortUrl Configuration
+            modelBuilder.Entity<ShortUrl>(entity =>
+            {
+                entity.HasIndex(u => u.ShortCode).IsUnique();
+
+                // Use Identity for the ID (The Postgres way)
+                entity.Property(e => e.Id)
+                      .UseIdentityByDefaultColumn();
+            });
+
+            // ClickEvent Configuration (Important to fix this now too!)
+            modelBuilder.Entity<ClickEvent>(entity =>
+            {
+                entity.Property(e => e.Id)
+                      .UseIdentityByDefaultColumn();
+            });
         }
+
     }
 }
