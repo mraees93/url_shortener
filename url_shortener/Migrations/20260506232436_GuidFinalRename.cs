@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace url_shortener.Migrations
 {
     /// <inheritdoc />
-    public partial class GuidIdentityFix : Migration
+    public partial class GuidFinalRename : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ClickEvents",
+                name: "Clicks_v5_Final",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
@@ -22,11 +22,11 @@ namespace url_shortener.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClickEvents", x => x.Id);
+                    table.PrimaryKey("PK_Clicks_v5_Final", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Links_Final_v4",
+                name: "Links_v5_Final",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
@@ -36,12 +36,12 @@ namespace url_shortener.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Links_Final_v4", x => x.Id);
+                    table.PrimaryKey("PK_Links_v5_Final", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Links_Final_v4_ShortCode",
-                table: "Links_Final_v4",
+                name: "IX_Links_v5_Final_ShortCode",
+                table: "Links_v5_Final",
                 column: "ShortCode",
                 unique: true);
         }
@@ -50,10 +50,10 @@ namespace url_shortener.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ClickEvents");
+                name: "Clicks_v5_Final");
 
             migrationBuilder.DropTable(
-                name: "Links_Final_v4");
+                name: "Links_v5_Final");
         }
     }
 }

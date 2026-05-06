@@ -22,11 +22,14 @@ namespace url_shortener.Database
 
             modelBuilder.Entity<ShortUrl>(entity =>
             {
-                entity.ToTable("Links_Final_v4"); 
+                entity.ToTable("Links_v5_Final"); 
                 entity.HasIndex(u => u.ShortCode).IsUnique();
             });
+
+            modelBuilder.Entity<ClickEvent>(entity =>
+            {
+                entity.ToTable("Clicks_v5_Final"); 
+            });
         }
-
-
     }
 }
