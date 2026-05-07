@@ -8,15 +8,15 @@ System Design & Microservice Principles implemented:
 
 Vertex was engineered following modern distributed system patterns to ensure scalability and environmental portability:
 
-Decoupled Architecture (SoC): The system is split into three distinct layers (Client, Application, and Data) communicating via RESTful APIs. This ensures that the frontend and backend can scale or be updated independently.
+1. Decoupled Architecture (SoC): The system is split into three distinct layers (Client, Application, and Data) communicating via RESTful APIs. This ensures that the frontend and backend can scale or be updated independently.
 
-Cloud-Native & Containerised: The backend is packaged via Docker, ensuring "Build Once, Run Anywhere" consistency. The application uses a Universal DB Strategy, automatically switching between SQLite for local development and PostgreSQL for production based on environment detection.
+2. Cloud-Native & Containerised: The backend is packaged via Docker, ensuring "Build Once, Run Anywhere" consistency. The application uses a Universal DB Strategy, automatically switching between SQLite for local development and PostgreSQL for production based on environment detection.
 
-Application-Level Identity (GUIDs): To bypass the common "Identity Handshake" failures in distributed databases, Vertex uses String GUIDs generated at the application level. This ensures high write availability and makes the system database-agnostic.
+3. Application-Level Identity (GUIDs): To bypass the common "Identity Handshake" failures in distributed databases, Vertex uses String GUIDs generated at the application level. This ensures high write availability and makes the system database-agnostic.
 
-Optimistic UI & State Management: The frontend implements Optimistic UI updates, allowing links to appear in the history log instantly before the server round-trip is complete, providing a zero-latency user experience.
+4. Optimistic UI & State Management: The frontend implements Optimistic UI updates, allowing links to appear in the history log instantly before the server round-trip is complete, providing a zero-latency user experience.
 
-Traffic Management: Includes Fixed Window Rate Limiting and Proxy Awareness (Forwarded Headers) to ensure the service remains secure and stable under high load on cloud providers like Render.
+5. Traffic Management: Includes Fixed Window Rate Limiting and Proxy Awareness (Forwarded Headers) to ensure the service remains secure and stable under high load on cloud providers like Render.
 
 
 
@@ -31,13 +31,13 @@ CI/CD: Automatic deployment pipelines via GitHub integration.
 
 Key Features:
 
-Permanent History: A cloud-hosted PostgreSQL database ensures your "System Activity Log" survives server restarts.
+1. Permanent History: A cloud-hosted PostgreSQL database ensures your "System Activity Log" survives server restarts.
 
-Server Spin-up Detection: Custom frontend logic to notify users when the free-tier server is waking up.
+2. Server Spin-up Detection: Custom frontend logic to notify users when the free-tier server is waking up.
 
-Clean Redirection: Seamlessly redirects users from short codes to original destinations with 302 status codes.
+3. Clean Redirection: Seamlessly redirects users from short codes to original destinations with 302 status codes.
 
-Database Projection: Uses DTO patterns to protect internal schemas and minimize network payloads.
+4. Database Projection: Uses DTO patterns to protect internal schemas and minimize network payloads.
 
 
 
