@@ -1,12 +1,59 @@
-Vertex is a containerised, high-performance microservice architecture built with .NET 10 and React. It demonstrates advanced system design patterns including In-Memory Caching, Rate Limiting, and Relational Analytics.
+Vertex | High-Performance URL Shortener:
+
+Vertex is a full-stack, containerised URL shortening service designed for speed and reliability. Built with a modern .NET 10 backend and a React + Tailwind frontend, it leverages a decoupled MVC architecture within a distributed system to provide permanent link history and real-time click analytics.
 
 
-What was added:
 
-1. Backend Architecture (C# / .NET 9)Vertical Slice Logic: Separated concerns into Controllers, Services (Hashing logic), and Models.Database Integration: Implemented Entity Framework Core with SQLite (and prepared for PostgreSQL in production).Database Indexing: Added a Unique Index on the ShortCode column for \(O(\log n)\) lookup speeds and data integrity.In-Memory Caching: Integrated IMemoryCache to optimize the "hot path" (redirects), reducing database load.Global Exception Middleware: Built a centralized "safety net" that catches all server errors and returns professional, structured JSON responses.Rate Limiting: Implemented the .NET 9 Fixed Window Limiter to protect the API from bot spam and DDoS attacks.Analytics Engine: Created a relational tracking system that logs every click, including Timestamps and User-Agent data.
+System Design & Microservice Principles implemented:
+
+Vertex was engineered following modern distributed system patterns to ensure scalability and environmental portability:
+
+Decoupled Architecture (SoC): The system is split into three distinct layers (Client, Application, and Data) communicating via RESTful APIs. This ensures that the frontend and backend can scale or be updated independently.
+
+Cloud-Native & Containerised: The backend is packaged via Docker, ensuring "Build Once, Run Anywhere" consistency. The application uses a Universal DB Strategy, automatically switching between SQLite for local development and PostgreSQL for production based on environment detection.
+
+Application-Level Identity (GUIDs): To bypass the common "Identity Handshake" failures in distributed databases, Vertex uses String GUIDs generated at the application level. This ensures high write availability and makes the system database-agnostic.
+
+Optimistic UI & State Management: The frontend implements Optimistic UI updates, allowing links to appear in the history log instantly before the server round-trip is complete, providing a zero-latency user experience.
+
+Traffic Management: Includes Fixed Window Rate Limiting and Proxy Awareness (Forwarded Headers) to ensure the service remains secure and stable under high load on cloud providers like Render.
 
 
-2. Frontend Architecture (React / TypeScript)Vite + Tailwind CSS v4: Used the latest 2026 standards for a high-performance, modern UI.Custom Hooks (useHistory): Abstracted all state management and data fetching out of the UI components.Service Layer (urlApi): Dedicated API client using the Fetch API for clean, reusable network calls.Smart Polling: Implemented a useEffect strategy in the ResultCard that auto-refreshes click counts when the user switches back to the tab.Modular Components: Split the UI into UrlInput, HistoryList, and ResultCard for better maintainability.
+
+Tech Stack:
+
+Frontend: React (TypeScript), Tailwind CSS, hosted on Vercel.
+Backend: ASP.NET Core 10 Web API (Dockerized), hosted on Render.
+Database: Aiven PostgreSQL (Production) and SQLite (Local).
+CI/CD: Automatic deployment pipelines via GitHub integration.
 
 
-3. Quality & ReliabilityxUnit Testing Suite: Added Unit Tests for the hashing service using [Fact] and [Theory] (Data-Driven testing) to ensure code quality.TypeScript Type-Safety: Used strict interfaces and verbatimModuleSyntax to ensure zero runtime type errors.
+
+Key Features:
+
+Permanent History: A cloud-hosted PostgreSQL database ensures your "System Activity Log" survives server restarts.
+
+Server Spin-up Detection: Custom frontend logic to notify users when the free-tier server is waking up.
+
+Clean Redirection: Seamlessly redirects users from short codes to original destinations with 302 status codes.
+
+Database Projection: Uses DTO patterns to protect internal schemas and minimize network payloads.
+
+
+
+Testing Guide:
+To verify the full functionality of the Vertex system, follow these steps:
+
+1. Verification of Core LogicShorten a Link: 
+Paste a long URL (e.g., https://google.com) into the input field and click Shorten.
+Check the UI: The new link should appear immediately at the top of the System Activity Log.
+Verify Redirection: Click the generated short link. It should open a new tab and successfully navigate to your destination.
+
+2. Persistence Test (The "Acid Test") 
+Refresh the Browser: Reload the page. The System Activity Log should remain visible with all your previously shortened links.
+Cross-Browser Check: Open the site in an Incognito window. Your history will be there, proving the data is stored in the Aiven Cloud and not just local state.
+
+3. Error Handling & Resilience
+Duplicate Prevention: Try shortening the same URL twice. The system will prevent duplicate entries in the UI.
+Invalid URLs: Enter a string that isn't a URL. The system should provide a validation error.
+Rate Limiting: Rapidly click shorten 10 times. You should see a "Too many requests" message, confirming the security middleware is active.
