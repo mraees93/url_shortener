@@ -45,6 +45,7 @@ namespace url_shortener.Controllers
 
             var response = new
             {
+                id = newUrl.Id,
                 shortCode = code,
                 longUrl = url,
                 shortUrl = $"{protocol}://{host}/{code}"
@@ -94,6 +95,7 @@ namespace url_shortener.Controllers
                 .Take(10)
                 .Select(u => new
                 {
+                    id = u.Id,
                     u.ShortCode,
                     u.LongUrl,
                     // This ensures the frontend has the full clickable link
@@ -102,6 +104,20 @@ namespace url_shortener.Controllers
                 .ToListAsync();
 
             return Ok(history);
+        }
+
+        [HttpDelete("history/{id}")]
+        public async Task<IActionResult> DeleteUrlById(string id)
+        {
+            var ShortUrl = await _context.ShortUrls.FindAsync(id);
+            if (ShortUrl == null)
+            {
+                return NotFound(new { message = "Link not found or already deleted" });
+            }
+
+            _context.ShortUrls.Remove(ShortUrl);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
     }

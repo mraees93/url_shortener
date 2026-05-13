@@ -1,6 +1,7 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5219/api/url';
 
 export interface ShortenedLink {
+  id: string;
   shortCode: string;
   longUrl: string;
   shortUrl: string;
@@ -34,4 +35,17 @@ export const urlApi = {
     if (!response.ok) throw new Error('Failed to fetch history');
     return await response.json();
   },
+
+  deleteUrlByID: async (id: number | string): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/history/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to delete item: ${response.statusText}`);
+    }
+
+    console.log('Item deleted successfully');
+  },
+
 };

@@ -60,6 +60,7 @@ export const useHistory = () => {
     history,
     isLoading,
     shortenUrl,
-    isServerStarting
+    isServerStarting,
+    setHistory
   };
 };
