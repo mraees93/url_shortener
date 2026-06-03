@@ -1,10 +1,10 @@
-Vertex | High-Performance URL Shortener:
+Vertex | Decoupled Distributed Architecture:
 
-Vertex is a full-stack, containerised URL shortening service designed for speed and reliability. Built with a modern .NET 10 backend and a React + Tailwind frontend, it leverages a decoupled MVC architecture within a distributed system to provide permanent link history and real-time click analytics.
+Vertex is a full-stack, Docker-containerised URL shortening service designed for speed, security, and cloud scalability. Built with a modern .NET 10 backend and a React + Tailwind frontend, it leverages a decoupled MVC architecture and distributed system design to provide permanent link history, temporal caching, and real-time click analytics.
 
 
 
-System Design & Microservice Principles implemented:
+System Design & Distributed Architecture Principles Implemented:
 
 Vertex was engineered following modern distributed system patterns to ensure scalability and environmental portability:
 
@@ -16,7 +16,11 @@ Vertex was engineered following modern distributed system patterns to ensure sca
 
 4. Optimistic UI & State Management: The frontend implements Optimistic UI updates, allowing links to appear in the history log instantly before the server round-trip is complete, providing a zero-latency user experience.
 
-5. Traffic Management: Includes Fixed Window Rate Limiting and Proxy Awareness (Forwarded Headers) to ensure the service remains secure and stable under high load on cloud providers like Render.
+5. Traffic & Resilience Management: Includes Fixed Window Rate Limiting and Proxy Awareness (Forwarded Headers) alongside Global Exception Handling Middleware to ensure the service remains secure, standardizes error payloads, and stands stable under high load on cloud providers like Render.
+
+6. High-Performance B-Tree Data Indexing: Configured unique database indices on the high-frequency ShortCode lookup columns using Entity Framework Fluent API. This optimizes short-link redirections down to \(O(\log N)\) search latency, completely eliminating expensive, sequential table scans.
+
+7. Temporal Client-Side Caching (HTTP 302 Redirection): Leverages native HTTP protocol rules to implement a pragmatic client-side caching loop. Returning 302 Found responses instructs client web browsers to temporarily cache the link target path, dropping repeat redirect latency to \(0\text{ms}\) while safely preserving backend data mutability lifecycles.
 
 
 
