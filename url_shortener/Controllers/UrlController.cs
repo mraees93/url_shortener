@@ -20,11 +20,13 @@ namespace url_shortener.Controllers
     {
         private readonly AppDbContext _context;
         private readonly UrlShortenerService _service;
+        private readonly SecurityPerimeterService _aiGuard;
 
-        public UrlController(AppDbContext context, UrlShortenerService service)
+        public UrlController(AppDbContext context, UrlShortenerService service, SecurityPerimeterService aiGuard)
         {
             _context = context;
             _service = service;
+            _aiGuard = aiGuard;
         }
 
         [HttpPost("shorten")]
@@ -33,6 +35,13 @@ namespace url_shortener.Controllers
         {
             if (!Uri.TryCreate(url, UriKind.Absolute, out _))
                 return BadRequest("Invalid URL");
+
+            // AI FIREWALL CHECK: Scans the target link before database execution
+            var isSafe = await _aiGuard.IsUrlSafeAsync(url);
+            if (!isSafe)
+            {
+                return BadRequest(new { message = "AI Guard: This destination URL has been blocked as a high-risk security threat." });
+            }
 
             var code = _service.GenerateCode();
             var newUrl = new ShortUrl { LongUrl = url, ShortCode = code };

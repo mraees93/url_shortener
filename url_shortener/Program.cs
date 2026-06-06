@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddScoped<url_shortener.Services.SecurityPerimeterService>();
 
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
