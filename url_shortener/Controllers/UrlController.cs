@@ -40,7 +40,7 @@ namespace url_shortener.Controllers
             var isSafe = await _aiGuard.IsUrlSafeAsync(url);
             if (!isSafe)
             {
-                return BadRequest(new { message = "AI Guard: This destination URL has been blocked as a high-risk security threat." });
+                return BadRequest(new { message = "Security Perimeter: This destination URL has been blocked as a high-risk security threat." });
             }
 
             var code = _service.GenerateCode();

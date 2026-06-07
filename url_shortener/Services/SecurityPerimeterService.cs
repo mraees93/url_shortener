@@ -49,13 +49,13 @@ namespace url_shortener.Services
             double structuralRiskProbability = Math.Min((threatWeight / 12.0) * 100, 100.0);
             string safetyVerdict = structuralRiskProbability >= 50.0 ? "Malicious" : "Safe";
 
-            _logger.LogInformation($"[AI GUARD] Local Token Classification Scan Completed for URL: {url}");
-            _logger.LogInformation($"[AI GUARD] Metrics -> Classification Weight: {threatWeight}, Threat Probability: {structuralRiskProbability:F1}%, Assigned Intent: {dynamicIntent}, Verdict: {safetyVerdict}");
+            _logger.LogInformation($"[SECURITY PERIMETER] Local Token Classification Scan Completed for URL: {url}");
+            _logger.LogInformation($"[SECURITY PERIMETER] Metrics -> Classification Weight: {threatWeight}, Threat Probability: {structuralRiskProbability:F1}%, Assigned Intent: {dynamicIntent}, Verdict: {safetyVerdict}");
 
             // The Perimeter Boundary Block Execution Node
             if (safetyVerdict == "Malicious")
             {
-                _logger.LogWarning($"[AI GUARD] FIREWALL SECURITY TRIGGERED: Blocking link based on high threat probability ({structuralRiskProbability:F1}%). Vector: {dynamicIntent}");
+                _logger.LogWarning($"[SECURITY PERIMETER] FIREWALL SECURITY TRIGGERED: Blocking link based on high threat probability ({structuralRiskProbability:F1}%). Vector: {dynamicIntent}");
                 return false;
             }
 

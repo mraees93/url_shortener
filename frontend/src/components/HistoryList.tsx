@@ -3,15 +3,11 @@ import type { ShortenedLink } from '../api/urlApi';
 
 interface HistoryListProps {
   links: ShortenedLink[];
-  setHistory: React.Dispatch<React.SetStateAction<ShortenedLink[]>>;
+  onDeleteClick: (id: string) => void; 
 }
 
-export const HistoryList = ({ links, setHistory }: HistoryListProps) => {
+export const HistoryList = ({ links, onDeleteClick }: HistoryListProps) => {
   if (links.length === 0) return null;
-
-  const handleCardDelete = (idToRemove: string) => {
-    setHistory((prev) => prev.filter((link) => link.id !== idToRemove));
-  };
 
   return (
     <div className="w-full space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -24,7 +20,7 @@ export const HistoryList = ({ links, setHistory }: HistoryListProps) => {
             key={link.shortCode}
             id={link.id}
             shortUrl={link.shortUrl}
-            onDelete={handleCardDelete}
+            onDeleteClick={onDeleteClick}
           />
         ))}
       </div>

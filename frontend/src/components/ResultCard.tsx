@@ -5,10 +5,10 @@ import { urlApi } from '../api/urlApi';
 interface ResultCardProps {
   id: string;
   shortUrl: string;
-  onDelete: (id: string) => void;
+  onDeleteClick: (id: string) => void; // MATCHED: Renamed to point cleanly to the modal loop
 }
 
-export const ResultCard = ({ id, shortUrl, onDelete }: ResultCardProps) => {
+export const ResultCard = ({ id, shortUrl, onDeleteClick }: ResultCardProps) => {
   const [copied, setCopied] = useState(false);
   const [clicks, setClicks] = useState<number | null>(null);
 
@@ -31,21 +31,6 @@ export const ResultCard = ({ id, shortUrl, onDelete }: ResultCardProps) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleDeleteUrl = async () => {
-    if (!confirm("Are you sure you want to delete this link?")) return;
-
-    try {
-      // 1. Call the API file
-      await urlApi.deleteUrlByID(id);
-
-      // 2. Notify parent component to remove it from the list immediately
-      onDelete(id);
-    } catch (error) {
-      console.error("Delete failed:", error);
-      alert("Failed to delete the link. Please try again.");
-    }
-  };
-
   if (!shortUrl) return null;
 
   return (
@@ -65,7 +50,7 @@ export const ResultCard = ({ id, shortUrl, onDelete }: ResultCardProps) => {
         {copied ? <Check size={20} /> : <Copy size={20} />}
       </button>
       <button
-        onClick={handleDeleteUrl}
+        onClick={() => onDeleteClick(id)} // MATCHED: Hands the ID directly up to the App.tsx modal trigger
         className="p-2 text-red-500 border border-transparent hover:bg-red-500/10 hover:border-red-500/20 rounded-lg transition-all duration-200"
         title="Delete Link"
         aria-label="Delete link from history"
@@ -85,8 +70,6 @@ export const ResultCard = ({ id, shortUrl, onDelete }: ResultCardProps) => {
           />
         </svg>
       </button>
-
-
     </div>
   );
 };
