@@ -5,7 +5,7 @@ import { urlApi } from '../api/urlApi';
 interface ResultCardProps {
   id: string;
   shortUrl: string;
-  onDeleteClick: (id: string) => void; // MATCHED: Renamed to point cleanly to the modal loop
+  onDeleteClick: (id: string) => void;
 }
 
 export const ResultCard = ({ id, shortUrl, onDeleteClick }: ResultCardProps) => {
@@ -35,13 +35,22 @@ export const ResultCard = ({ id, shortUrl, onDeleteClick }: ResultCardProps) => 
 
   return (
     <div className="animate-in fade-in slide-in-from-top-4 duration-500 bg-indigo-50 border border-indigo-100 p-4 rounded-xl flex items-center justify-between">
-      <span className="text-indigo-700 font-medium truncate mr-4">
+      {/* FIX: Swapped span for an interactive HTML anchor tag targeting a new blank browser tab */}
+      <a 
+        href={shortUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-indigo-700 font-medium truncate mr-4 hover:text-indigo-900 hover:underline transition-all"
+        title="Click to visit link in a new tab"
+      >
         {shortUrl}
-      </span>
+      </a>
+      
       <div className="flex items-center gap-1 bg-slate-100 text-slate-600 px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider">
         <BarChart3 size={14} />
-        {clicks !== null ? `${clicks} Clicks` : '...'}
+        {clicks === 1 ? `${clicks} Click` : clicks !== null ? `${clicks} Clicks` : '...'}
       </div>
+      
       <button
         onClick={copyToClipboard}
         className="p-2 hover:bg-indigo-100 rounded-lg transition-colors text-indigo-600 flex-shrink-0"
@@ -49,14 +58,15 @@ export const ResultCard = ({ id, shortUrl, onDeleteClick }: ResultCardProps) => 
       >
         {copied ? <Check size={20} /> : <Copy size={20} />}
       </button>
+      
       <button
-        onClick={() => onDeleteClick(id)} // MATCHED: Hands the ID directly up to the App.tsx modal trigger
+        onClick={() => onDeleteClick(id)}
         className="p-2 text-red-500 border border-transparent hover:bg-red-500/10 hover:border-red-500/20 rounded-lg transition-all duration-200"
         title="Delete Link"
         aria-label="Delete link from history"
       >
         <svg
-          xmlns="w3.org"
+          xmlns="http://w3.org"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
